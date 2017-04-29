@@ -1,0 +1,2 @@
+Make a script that runs as a daemon and listens for input from sensor network
+Make a script that can be called by that script to slice up the input and send it to port 2003 on the boss server (104.131.45.105)
