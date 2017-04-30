@@ -1,2 +1,2 @@
 # boss
-Bed Occupancy Sensor System for Hackathon 2017
+Bed Occupancy Sensor Suite for Hackathon 2017
