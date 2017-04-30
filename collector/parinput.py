@@ -14,7 +14,7 @@ array = []
 #        content = f.read().splitlines()
 #        for line in content:
 while True:
-        item = ser.readline()
+        line = ser.readline()
         mydict = dict(item.split(':') for item in line.split())
         tempmsg = "center1.bed%s.temp %s %i\n" % (mydict['N'][-1:], mydict['T'], int(time.time())) 
         print 'sending message:\n%s' % tempmsg
