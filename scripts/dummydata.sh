@@ -7,8 +7,13 @@ DATA_TYPE=$2
 
 if [ $DATA_TYPE == "bend" ]; then
     while [ 1 -eq 1 ]; do
-        echo "$METRIC_NAME $(( RANDOM % (947 - 730 + 1 ) + 730 )) `date +%s`" | nc $GRAPH_SERVER $GRAPH_PORT; #If running on a mac will need -c in the nc command
+            echo "$METRIC_NAME $(( RANDOM % 2 )) `date +%s`" | nc $GRAPH_SERVER $GRAPH_PORT; #If running on a mac will need -c in the nc command
         sleep 1;
     done;
 fi
-
+if [ $DATA_TYPE == "temp" ]; then
+    while [ 1 -eq 1 ]; do
+            echo "$METRIC_NAME $(( RANDOM % (98 - 70 + 1 ) + 70 )) `date +%s`" | nc $GRAPH_SERVER $GRAPH_PORT; #If running on a mac will need -c in the nc command
+        sleep 1;
+    done;
+fi
