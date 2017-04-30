@@ -1,18 +1,18 @@
-"C:\Users\mscottnelson\Downloads\IAR BOSS 1155\IAR BOSS 1155\Applications\virtual_com_cmds.c"
+"C:\Users\mscottnelson\Documents\GitHub\boss\firmware\Applications\virtual_com_cmds.c"
 -std=c99
 -ferror-limit=100
 -I
-C:\Users\mscottnelson\Downloads\IAR BOSS 1155\IAR BOSS 1155\Components\bsp
+C:\Users\mscottnelson\Documents\GitHub\boss\firmware\Components\bsp
 -I
-C:\Users\mscottnelson\Downloads\IAR BOSS 1155\IAR BOSS 1155\Components\bsp\drivers
+C:\Users\mscottnelson\Documents\GitHub\boss\firmware\Components\bsp\drivers
 -I
-C:\Users\mscottnelson\Downloads\IAR BOSS 1155\IAR BOSS 1155\Components\bsp\boards\EZ430RF
+C:\Users\mscottnelson\Documents\GitHub\boss\firmware\Components\bsp\boards\EZ430RF
 -I
-C:\Users\mscottnelson\Downloads\IAR BOSS 1155\IAR BOSS 1155\Components\mrfi
+C:\Users\mscottnelson\Documents\GitHub\boss\firmware\Components\mrfi
 -I
-C:\Users\mscottnelson\Downloads\IAR BOSS 1155\IAR BOSS 1155\Components\SimpliciTI\nwk
+C:\Users\mscottnelson\Documents\GitHub\boss\firmware\Components\SimpliciTI\nwk
 -I
-C:\Users\mscottnelson\Downloads\IAR BOSS 1155\IAR BOSS 1155\Components\SimpliciTI\nwk_applications
+C:\Users\mscottnelson\Documents\GitHub\boss\firmware\Components\SimpliciTI\nwk_applications
 -I
 C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.0\430\inc\clib
 -I
@@ -20,17 +20,17 @@ C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.0\430\inc
 -I
 C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.0\430\inc\clib
 -I
-C:\Users\mscottnelson\Downloads\IAR BOSS 1155\IAR BOSS 1155\Components\bsp
+C:\Users\mscottnelson\Documents\GitHub\boss\firmware\Components\bsp
 -I
-C:\Users\mscottnelson\Downloads\IAR BOSS 1155\IAR BOSS 1155\Components\bsp\drivers
+C:\Users\mscottnelson\Documents\GitHub\boss\firmware\Components\bsp\drivers
 -I
-C:\Users\mscottnelson\Downloads\IAR BOSS 1155\IAR BOSS 1155\Components\bsp\boards\EZ430RF
+C:\Users\mscottnelson\Documents\GitHub\boss\firmware\Components\bsp\boards\EZ430RF
 -I
-C:\Users\mscottnelson\Downloads\IAR BOSS 1155\IAR BOSS 1155\Components\mrfi
+C:\Users\mscottnelson\Documents\GitHub\boss\firmware\Components\mrfi
 -I
-C:\Users\mscottnelson\Downloads\IAR BOSS 1155\IAR BOSS 1155\Components\SimpliciTI\nwk
+C:\Users\mscottnelson\Documents\GitHub\boss\firmware\Components\SimpliciTI\nwk
 -I
-C:\Users\mscottnelson\Downloads\IAR BOSS 1155\IAR BOSS 1155\Components\SimpliciTI\nwk_applications
+C:\Users\mscottnelson\Documents\GitHub\boss\firmware\Components\SimpliciTI\nwk_applications
 -D__CHAR_BITS__=8
 -D__CHAR_MAX__=0xff
 -D__CHAR_MIN__=0

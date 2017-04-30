@@ -1,6 +1,6 @@
 ###############################################################################
 #
-# IAR C/C++ Compiler V7.10.1.973/W32 for MSP430           30/Apr/2017  02:05:43
+# IAR C/C++ Compiler V7.10.1.973/W32 for MSP430           30/Apr/2017  11:23:40
 # Copyright 1996-2017 IAR Systems AB.
 # Evaluation license - IAR Embedded Workbench for Texas Instruments MSP430, Evaluation Version 7.10
 #
@@ -13,7 +13,7 @@
 #    Source file   =  
 #        C:\Users\mscottnelson\Documents\GitHub\boss\firmware\Applications\main_AP.c
 #    Command line  =  
-#        -f C:\Users\MSCOTT~1\AppData\Local\Temp\EWB1D4.tmp (-f
+#        -f C:\Users\MSCOTT~1\AppData\Local\Temp\EW82A6.tmp (-f
 #        C:\Users\mscottnelson\Documents\GitHub\boss\firmware\Configuration\smpl_config_AP.dat
 #        (-DNUM_CONNECTIONS=8 -DSIZE_INFRAME_Q=6 -DSIZE_OUTFRAME_Q=2
 #        "-DTHIS_DEVICE_ADDRESS={0x78, 0x56, 0x34, 0x12}" -DACCESS_POINT
@@ -339,7 +339,7 @@ C:\Users\mscottnelson\Documents\GitHub\boss\firmware\Applications\main_AP.c
     284                char msg [7];
     285                char addr[] = {"HUB0"};
     286                char rssi[] = {"000"};
-    287                int degC, volt, bend;
+    287                int degC, volt, bend, pressure;
     288                volatile long temp;
     289                int results[6];
     290          ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -383,213 +383,239 @@ C:\Users\mscottnelson\Documents\GitHub\boss\firmware\Applications\main_AP.c
     328                ADC10CTL0 &= ~ENC;
     329                ADC10CTL0 &= ~(REFON + ADC10ON);
     330              
-    331          //////////////////////////////////////////////////////////////////////////////////////////////////    
-    332          
-    333                /* oC = ((A10/1024)*1500mV)-986mV)*1/3.55mV = A10*423/1024 - 278
-    334                 * the temperature is transmitted as an integer where 32.1 = 321
-    335                 * hence 4230 instead of 423
-    336                 */
-    337                temp = results[0];
-    338                degC = ((temp - 673) * 4230) / 1024;
-    339                if( (*tempOffset) != 0xFFFF )
-    340                {
-    341                  degC += (*tempOffset);
-    342                }
-    343          
-    344                temp = results[1];
-    345                volt = (temp*25)/512;
-    346          
-    347                //MESN this is arbitrary scaling towards a 0-127 range for ASCII conversion if later desired
-    348                //if this approach is actually wanted, check voltage levels and scale more appropriately
-    349                //temp = (results[2] - 500)/6;
-    350          
-    351                temp = results[2];
-    352                if(temp > 1000) //'on' cutoff point
-    353                {
-    354                  bend = '1';
-    355                }else{
-    356                  bend = '0';
-    357                }
-    358                /* Package up the data */
-    359                msg[0] = degC&0xFF;
-    360                msg[1] = (degC>>8)&0xFF;
-    361                msg[2] = volt;
-    362                msg[3] = bend;
-    363                msg[4] = 'b';
-    364                msg[5] = 'c';
-    365                msg[6] = 'd';
-    366          
-    367                /* Send it over serial port */
-    368                transmitDataString(1, addr, rssi, msg );
-    369          
-    370                BSP_TOGGLE_LED1();
-    371          
-    372                /* Done with measurement, disable measure flag */
-    373                sSelfMeasureSem = 0;
-    374              }
-    375          
-    376              /* Have we received a frame on one of the ED connections?
-    377               * No critical section -- it doesn't really matter much if we miss a poll
-    378               */
-    379              if (sPeerFrameSem)
-    380              {
-    381                uint8_t     msg[MAX_APP_PAYLOAD], len, i;
-    382          
-    383                /* process all frames waiting */
-    384                for (i=0; i<sNumCurrentPeers; ++i)
-    385                {
-    386                  if (SMPL_SUCCESS == SMPL_Receive(sLID[i], msg, &len))
-    387                  {
-    388                    ioctlRadioSiginfo_t sigInfo;
-    389          
-    390                    processMessage(sLID[i], msg, len);
-    391          
-    392                    sigInfo.lid = sLID[i];
-    393          
-    394                    SMPL_Ioctl(IOCTL_OBJ_RADIO, IOCTL_ACT_RADIO_SIGINFO, (void *)&sigInfo);
+    331          ////////////////////////////////////////////////////////////////////////////////////////////////// 
+    332          /* MESN Get voltage from Channel A1 left intentionally blank */    
+    333          //////////////////////////////////////////////////////////////////////////////////////////////////
+    334          /* MESN Get voltage from Channel A2 */     
+    335          // Pressure sensor
+    336               
+    337                ADC10CTL1 = INCH_0;                     // selects channel 0 
+    338                ADC10CTL0 = SREF_1 + ADC10SHT_2 + REFON + ADC10ON + ADC10IE + REF2_5V;
+    339                __delay_cycles(240);
+    340                ADC10CTL0 |= ENC + ADC10SC;             // Sampling and conversion start
+    341                __bis_SR_register(CPUOFF + GIE);        // LPM0 with interrupts enabled
+    342                results[4] = ADC10MEM;                  // Retrieve result
+    343                
+    344                /* Stop and turn off ADC */
+    345                ADC10CTL0 &= ~ENC;
+    346                ADC10CTL0 &= ~(REFON + ADC10ON);
+    347              
+    348          //////////////////////////////////////////////////////////////////////////////////////////////////
+    349          
+    350                /* oC = ((A10/1024)*1500mV)-986mV)*1/3.55mV = A10*423/1024 - 278
+    351                 * the temperature is transmitted as an integer where 32.1 = 321
+    352                 * hence 4230 instead of 423
+    353                 */
+    354                temp = results[0];
+    355                degC = ((temp - 673) * 4230) / 1024;
+    356                if( (*tempOffset) != 0xFFFF )
+    357                {
+    358                  degC += (*tempOffset);
+    359                }
+    360          
+    361                temp = results[1];
+    362                volt = (temp*25)/512;
+    363          
+    364                //MESN this is arbitrary scaling towards a 0-127 range for ASCII conversion if later desired
+    365                //if this approach is actually wanted, check voltage levels and scale more appropriately
+    366                //temp = (results[2] - 500)/6;
+    367          
+    368                temp = results[2];
+    369                if(temp > 1000) //'on' cutoff point
+    370                {
+    371                  bend = '1';
+    372                }else{
+    373                  bend = '0';
+    374                }
+    375                
+    376                temp = results[4];
+    377                if(temp > 1000) //'on' cutoff point
+    378                {
+    379                  pressure = '1';
+    380                }else{
+    381                  pressure = '0';
+    382                }
+    383                
+    384                /* Package up the data */
+    385                msg[0] = degC&0xFF;
+    386                msg[1] = (degC>>8)&0xFF;
+    387                msg[2] = volt;
+    388                msg[3] = bend;
+    389                msg[4] = pressure;
+    390                msg[5] = 'c';
+    391                msg[6] = 'd';
+    392          
+    393                /* Send it over serial port */
+    394                transmitDataString(1, addr, rssi, msg );
     395          
-    396                    transmitData( i, sigInfo.sigInfo.rssi, (char*)msg );
-    397                    BSP_TOGGLE_LED2();
-    398          
-    399                    BSP_ENTER_CRITICAL_SECTION(intState);
-    400                    sPeerFrameSem--;
-    401                    BSP_EXIT_CRITICAL_SECTION(intState);
-    402                  }
-    403                }
-    404              }
-    405              if (BSP_BUTTON1())
+    396                BSP_TOGGLE_LED1();
+    397          
+    398                /* Done with measurement, disable measure flag */
+    399                sSelfMeasureSem = 0;
+    400              }
+    401          
+    402              /* Have we received a frame on one of the ED connections?
+    403               * No critical section -- it doesn't really matter much if we miss a poll
+    404               */
+    405              if (sPeerFrameSem)
     406              {
-    407                __delay_cycles(2000000);  /* debounce (0.25 seconds) */
-    408                changeChannel();
-    409              }
-    410              else
-    411              {
-    412                checkChangeChannel();
-    413              }
-    414              BSP_ENTER_CRITICAL_SECTION(intState);
-    415              if (sBlinky)
-    416              {
-    417                if (++sBlinky >= 0xF)
-    418                {
-    419                  sBlinky = 1;
-    420                  BSP_TOGGLE_LED1();
-    421                  BSP_TOGGLE_LED2();
-    422                }
-    423              }
-    424              BSP_EXIT_CRITICAL_SECTION(intState);
-    425            }
-    426          
-    427          }
-    428          
-    429          /* Runs in ISR context. Reading the frame should be done in the */
-    430          /* application thread not in the ISR thread. */
-    431          static uint8_t sCB(linkID_t lid)
-    432          {
-    433            if (lid)
-    434            {
-    435              sPeerFrameSem++;
-    436              sBlinky = 0;
-    437            }
-    438            else
-    439            {
-    440              sJoinSem++;
-    441            }
-    442          
-    443            /* leave frame to be read by application. */
-    444            return 0;
-    445          }
-    446          
-    447          static void processMessage(linkID_t lid, uint8_t *msg, uint8_t len)
-    448          {
-    449            //MESN not sure the below is the correct way to make the conversion from uint8_t
-    450            char c[] = {"BED0"};
-    451            c[3] = lid & 0xFF;
-    452            char temprssi[] = {"000"};
-    453            char tempMsg[] = {"abcdefgh"};
-    454            
-    455            if (len)
-    456            {
-    457              BSP_TOGGLE_LED1();
-    458              /* MESN TODO: Check that this ED message sends over AP serial */
-    459              transmitDataString(1, c, temprssi, msg);
-    460            }
-    461            
-    462           
-    463            return;
-    464          }
-    465          
-    466          static void changeChannel(void)
-    467          {
-    468          #ifdef FREQUENCY_AGILITY
-    469            freqEntry_t freq;
-    470          
-    471            if (++sChannel >= NWK_FREQ_TBL_SIZE)
-    472            {
-    473              sChannel = 0;
-    474            }
-    475            freq.logicalChan = sChannel;
-    476            SMPL_Ioctl(IOCTL_OBJ_FREQ, IOCTL_ACT_SET, &freq);
-    477            BSP_TURN_OFF_LED1();
-    478            BSP_TURN_OFF_LED2();
-    479            sBlinky = 1;
-    480          #endif
-    481            return;
-    482          }
-    483          
-    484          /* implement auto-channel-change policy here... */
-    485          static void checkChangeChannel(void)
-    486          {
-    487          #ifdef FREQUENCY_AGILITY
-    488            int8_t dbm, inARow = 0;
-    489          
-    490            uint8_t i;
+    407                uint8_t     msg[MAX_APP_PAYLOAD], len, i;
+    408          
+    409                /* process all frames waiting */
+    410                for (i=0; i<sNumCurrentPeers; ++i)
+    411                {
+    412                  if (SMPL_SUCCESS == SMPL_Receive(sLID[i], msg, &len))
+    413                  {
+    414                    ioctlRadioSiginfo_t sigInfo;
+    415          
+    416                    processMessage(sLID[i], msg, len);
+    417          
+    418                    sigInfo.lid = sLID[i];
+    419          
+    420                    SMPL_Ioctl(IOCTL_OBJ_RADIO, IOCTL_ACT_RADIO_SIGINFO, (void *)&sigInfo);
+    421          
+    422                    transmitData( i, sigInfo.sigInfo.rssi, (char*)msg );
+    423                    BSP_TOGGLE_LED2();
+    424          
+    425                    BSP_ENTER_CRITICAL_SECTION(intState);
+    426                    sPeerFrameSem--;
+    427                    BSP_EXIT_CRITICAL_SECTION(intState);
+    428                  }
+    429                }
+    430              }
+    431              if (BSP_BUTTON1())
+    432              {
+    433                __delay_cycles(2000000);  /* debounce (0.25 seconds) */
+    434                changeChannel();
+    435              }
+    436              else
+    437              {
+    438                checkChangeChannel();
+    439              }
+    440              BSP_ENTER_CRITICAL_SECTION(intState);
+    441              if (sBlinky)
+    442              {
+    443                if (++sBlinky >= 0xF)
+    444                {
+    445                  sBlinky = 1;
+    446                  BSP_TOGGLE_LED1();
+    447                  BSP_TOGGLE_LED2();
+    448                }
+    449              }
+    450              BSP_EXIT_CRITICAL_SECTION(intState);
+    451            }
+    452          
+    453          }
+    454          
+    455          /* Runs in ISR context. Reading the frame should be done in the */
+    456          /* application thread not in the ISR thread. */
+    457          static uint8_t sCB(linkID_t lid)
+    458          {
+    459            if (lid)
+    460            {
+    461              sPeerFrameSem++;
+    462              sBlinky = 0;
+    463            }
+    464            else
+    465            {
+    466              sJoinSem++;
+    467            }
+    468          
+    469            /* leave frame to be read by application. */
+    470            return 0;
+    471          }
+    472          
+    473          static void processMessage(linkID_t lid, uint8_t *msg, uint8_t len)
+    474          {
+    475            //MESN not sure the below is the correct way to make the conversion from uint8_t
+    476            char c[] = {"BED0"};
+    477            c[3] = lid & 0xFF; //aim is to replace the final char with the id of the EP
+    478            char temprssi[] = {"000"}; //not sure how to use rssi
+    479            char tempMsg[] = {"abcdefgh"}; //*msg needs to have its type converted to char and replace this
+    480            
+    481            if (len)
+    482            {
+    483              BSP_TOGGLE_LED1();
+    484              /* MESN TODO: Check that this ED message sends over AP serial */
+    485              transmitDataString(1, c, temprssi, tempMsg);
+    486            }
+    487            
+    488           
+    489            return;
+    490          }
     491          
-    492            memset(sSample, 0x0, SSIZE);
-    493            for (i=0; i<SSIZE; ++i)
-    494            {
-    495              /* quit if we need to service an app frame */
-    496              if (sPeerFrameSem || sJoinSem)
-    497              {
-    498                return;
-    499              }
-    500              NWK_DELAY(1);
-    501              SMPL_Ioctl(IOCTL_OBJ_RADIO, IOCTL_ACT_RADIO_RSSI, (void *)&dbm);
-    502              sSample[i] = dbm;
-    503          
-    504              if (dbm > INTERFERNCE_THRESHOLD_DBM)
-    505              {
-    506                if (++inARow == IN_A_ROW)
-    507                {
-    508                  changeChannel();
-    509                  break;
-    510                }
-    511              }
-    512              else
-    513              {
-    514                inARow = 0;
-    515              }
-    516            }
-    517          #endif
-    518            return;
-    519          }
-    520          
-    521          /*------------------------------------------------------------------------------
-    522          * ADC10 interrupt service routine
-    523          ------------------------------------------------------------------------------*/
-    524          #pragma vector=ADC10_VECTOR
-    525          __interrupt void ADC10_ISR(void)
-    526          {
-    527            __bic_SR_register_on_exit(CPUOFF);        // Clear CPUOFF bit from 0(SR)
-    528          }
+    492          static void changeChannel(void)
+    493          {
+    494          #ifdef FREQUENCY_AGILITY
+    495            freqEntry_t freq;
+    496          
+    497            if (++sChannel >= NWK_FREQ_TBL_SIZE)
+    498            {
+    499              sChannel = 0;
+    500            }
+    501            freq.logicalChan = sChannel;
+    502            SMPL_Ioctl(IOCTL_OBJ_FREQ, IOCTL_ACT_SET, &freq);
+    503            BSP_TURN_OFF_LED1();
+    504            BSP_TURN_OFF_LED2();
+    505            sBlinky = 1;
+    506          #endif
+    507            return;
+    508          }
+    509          
+    510          /* implement auto-channel-change policy here... */
+    511          static void checkChangeChannel(void)
+    512          {
+    513          #ifdef FREQUENCY_AGILITY
+    514            int8_t dbm, inARow = 0;
+    515          
+    516            uint8_t i;
+    517          
+    518            memset(sSample, 0x0, SSIZE);
+    519            for (i=0; i<SSIZE; ++i)
+    520            {
+    521              /* quit if we need to service an app frame */
+    522              if (sPeerFrameSem || sJoinSem)
+    523              {
+    524                return;
+    525              }
+    526              NWK_DELAY(1);
+    527              SMPL_Ioctl(IOCTL_OBJ_RADIO, IOCTL_ACT_RADIO_RSSI, (void *)&dbm);
+    528              sSample[i] = dbm;
     529          
-    530          /*------------------------------------------------------------------------------
-    531          * Timer A0 interrupt service routine
-    532          ------------------------------------------------------------------------------*/
-    533          #pragma vector=TIMERA0_VECTOR
-    534          __interrupt void Timer_A (void)
-    535          {
-    536            sSelfMeasureSem = 1;
-    537          }
+    530              if (dbm > INTERFERNCE_THRESHOLD_DBM)
+    531              {
+    532                if (++inARow == IN_A_ROW)
+    533                {
+    534                  changeChannel();
+    535                  break;
+    536                }
+    537              }
+    538              else
+    539              {
+    540                inARow = 0;
+    541              }
+    542            }
+    543          #endif
+    544            return;
+    545          }
+    546          
+    547          /*------------------------------------------------------------------------------
+    548          * ADC10 interrupt service routine
+    549          ------------------------------------------------------------------------------*/
+    550          #pragma vector=ADC10_VECTOR
+    551          __interrupt void ADC10_ISR(void)
+    552          {
+    553            __bic_SR_register_on_exit(CPUOFF);        // Clear CPUOFF bit from 0(SR)
+    554          }
+    555          
+    556          /*------------------------------------------------------------------------------
+    557          * Timer A0 interrupt service routine
+    558          ------------------------------------------------------------------------------*/
+    559          #pragma vector=TIMERA0_VECTOR
+    560          __interrupt void Timer_A (void)
+    561          {
+    562            sSelfMeasureSem = 1;
+    563          }
 
    Maximum stack usage in bytes:
 
@@ -597,18 +623,19 @@ C:\Users\mscottnelson\Documents\GitHub\boss\firmware\Applications\main_AP.c
    ------ --------
       4   ADC10_ISR
       4   Timer_A
-     36   main
-       36   -> BSP_Init
-       36   -> COM_Init
-       36   -> SMPL_Init
-       36   -> SMPL_Ioctl
-       36   -> SMPL_LinkListen
-       36   -> SMPL_Receive
-       36   -> TXString
-       36   -> transmitData
-       36   -> transmitDataString
-       36 ?DivMod32s
-       36 ?Mul32
+     46   main
+       46   -> BSP_Init
+       46   -> COM_Init
+       46   -> SMPL_Init
+       46   -> SMPL_Ioctl
+       46   -> SMPL_LinkListen
+       46   -> SMPL_Receive
+       46   -> TXString
+       46   -> transmitData
+       46   -> transmitDataString
+       46 ?CopyMemoryBytes
+       46 ?DivMod32s
+       46 ?Mul32
       2   sCB
 
 
@@ -622,12 +649,14 @@ C:\Users\mscottnelson\Documents\GitHub\boss\firmware\Applications\main_AP.c
        7  ?<Constant "Done\r\n">
        5  ?<Constant "HUB0">
       27  ?<Constant "\r\nInitializing Networ...">
+       9  ?<Constant "abcdefgh">
        2  ?<Initializer for tempOffset>
-      24  ??Subroutine4_1
-       6  ?Subroutine0
+      32  ?Subroutine0
       22  ?Subroutine1
       18  ?Subroutine2
-      18  ?Subroutine3
+      10  ?Subroutine3
+      18  ?Subroutine4
+      12  ?Subroutine5
        2  ADC10CTL0
        2  ADC10CTL1
        2  ADC10MEM
@@ -641,7 +670,7 @@ C:\Users\mscottnelson\Documents\GitHub\boss\firmware\Applications\main_AP.c
        2  TACTL
        6  Timer_A
        2  Timer_A::??INTVEC 18
-     624  main
+     686  main
        1  sBlinky
       22  sCB
        1  sJoinSem
@@ -653,17 +682,17 @@ C:\Users\mscottnelson\Documents\GitHub\boss\firmware\Applications\main_AP.c
        2  tempOffset
 
  
- 748 bytes in segment CODE
+ 834 bytes in segment CODE
   15 bytes in segment DATA16_AN
- 391 bytes in segment DATA16_C
+ 400 bytes in segment DATA16_C
    2 bytes in segment DATA16_I
    2 bytes in segment DATA16_ID
   13 bytes in segment DATA16_Z
    4 bytes in segment INTVEC
  
- 748 bytes of CODE  memory
- 393 bytes of CONST memory (+  4 bytes shared)
+ 834 bytes of CODE  memory
+ 402 bytes of CONST memory (+  4 bytes shared)
   15 bytes of DATA  memory (+ 15 bytes shared)
 
 Errors: none
-Warnings: 2
+Warnings: none

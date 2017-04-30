@@ -38,7 +38,7 @@
 #include "virtual_com_cmds.h"
 
 static char verboseMode = 1;
-static char degCMode = 1;
+static char degCMode = 0;
 
 /******************************************************************************/
 // End Virtual Com Port Communication
@@ -126,33 +126,33 @@ void transmitDataString(char data_mode, char addr[4],char rssi[3], char msg[MESS
 
   if(data_mode & verboseMode)
   {
-  char output_verbose[] = {"\r\nN:XXXX T:-XX.XF B:X P:X T:X G:X I:X B:X.XV Str:XXX%"};
+  char output_verbose[] = {"\rN:XXXX T:-XX.XF B:X P:X C:X G:X I:X V:X.XV Str:XXX%\n"};
  //   char output_verbose[] = {"\r\nNode:XXXX,Temp:-XX.XC,Battery:X.XV,Strength:XXX%,RE:no "};
  //N:Node-identifier T:Temperature B:Bend P:Pressure T:Touch G:Gyro I:Infrared B:Battery
 
-    output_verbose[49] = rssi[0];
-    output_verbose[50] = rssi[1];
-    output_verbose[51] = rssi[2];
+    output_verbose[48] = rssi[0];
+    output_verbose[49] = rssi[1];
+    output_verbose[50] = rssi[2];
 
-    output_verbose[11] = temp_string[0];
-    output_verbose[12] = temp_string[1];
-    output_verbose[13] = temp_string[2];
-    output_verbose[14] = temp_string[3];
-    output_verbose[15] = temp_string[4];
-    output_verbose[16] = temp_string[5];
+    output_verbose[10] = temp_string[0];
+    output_verbose[11] = temp_string[1];
+    output_verbose[12] = temp_string[2];
+    output_verbose[13] = temp_string[3];
+    output_verbose[14] = temp_string[4];
+    output_verbose[15] = temp_string[5];
 
-    output_verbose[40] = '0'+(msg[2]/10)%10;
-    output_verbose[42] = '0'+(msg[2]%10);
-    output_verbose[4] = addr[0];
-    output_verbose[5] = addr[1];
-    output_verbose[6] = addr[2];
-    output_verbose[7] = addr[3];
+    output_verbose[39] = '0'+(msg[2]/10)%10;
+    output_verbose[41] = '0'+(msg[2]%10);
+    output_verbose[3] = addr[0];
+    output_verbose[4] = addr[1];
+    output_verbose[5] = addr[2];
+    output_verbose[6] = addr[3];
     
-    output_verbose[20] = msg[3];
-    output_verbose[24] = msg[4];
-    output_verbose[28] = msg[5];
-    output_verbose[32] = msg[6];
-    output_verbose[36] = '-';
+    output_verbose[19] = msg[3];
+    output_verbose[23] = msg[4];
+    output_verbose[27] = msg[5];
+    output_verbose[31] = msg[6];
+    output_verbose[35] = '-';
 
     TXString(output_verbose, sizeof output_verbose );
   }

@@ -1,6 +1,6 @@
 ###############################################################################
 #
-# IAR C/C++ Compiler V7.10.1.973/W32 for MSP430           30/Apr/2017  00:51:52
+# IAR C/C++ Compiler V7.10.1.973/W32 for MSP430           30/Apr/2017  11:34:41
 # Copyright 1996-2017 IAR Systems AB.
 # Evaluation license - IAR Embedded Workbench for Texas Instruments MSP430, Evaluation Version 7.10
 #
@@ -13,7 +13,7 @@
 #    Source file   =  
 #        C:\Users\mscottnelson\Documents\GitHub\boss\firmware\Applications\virtual_com_cmds.c
 #    Command line  =  
-#        -f C:\Users\MSCOTT~1\AppData\Local\Temp\EW1603.tmp (-f
+#        -f C:\Users\MSCOTT~1\AppData\Local\Temp\EW9C64.tmp (-f
 #        C:\Users\mscottnelson\Documents\GitHub\boss\firmware\Configuration\smpl_config_AP.dat
 #        (-DNUM_CONNECTIONS=8 -DSIZE_INFRAME_Q=6 -DSIZE_OUTFRAME_Q=2
 #        "-DTHIS_DEVICE_ADDRESS={0x78, 0x56, 0x34, 0x12}" -DACCESS_POINT
@@ -93,7 +93,7 @@ C:\Users\mscottnelson\Documents\GitHub\boss\firmware\Applications\virtual_com_cm
      38          #include "virtual_com_cmds.h"
      39          
      40          static char verboseMode = 1;
-     41          static char degCMode = 1;
+     41          static char degCMode = 0;
      42          
      43          /******************************************************************************/
      44          // End Virtual Com Port Communication
@@ -181,33 +181,33 @@ C:\Users\mscottnelson\Documents\GitHub\boss\firmware\Applications\virtual_com_cm
     126          
     127            if(data_mode & verboseMode)
     128            {
-    129            char output_verbose[] = {"\r\nN:XXXX T:-XX.XC B:X P:X T:X G:X I:X B:X.XV Str:XXX%"};
+    129            char output_verbose[] = {"\rN:XXXX T:-XX.XF B:X P:X C:X G:X I:X V:X.XV Str:XXX%\n"};
     130           //   char output_verbose[] = {"\r\nNode:XXXX,Temp:-XX.XC,Battery:X.XV,Strength:XXX%,RE:no "};
-    131           
+    131           //N:Node-identifier T:Temperature B:Bend P:Pressure T:Touch G:Gyro I:Infrared B:Battery
     132          
-    133              output_verbose[49] = rssi[0];
-    134              output_verbose[50] = rssi[1];
-    135              output_verbose[51] = rssi[2];
+    133              output_verbose[48] = rssi[0];
+    134              output_verbose[49] = rssi[1];
+    135              output_verbose[50] = rssi[2];
     136          
-    137              output_verbose[11] = temp_string[0];
-    138              output_verbose[12] = temp_string[1];
-    139              output_verbose[13] = temp_string[2];
-    140              output_verbose[14] = temp_string[3];
-    141              output_verbose[15] = temp_string[4];
-    142              output_verbose[16] = temp_string[5];
+    137              output_verbose[10] = temp_string[0];
+    138              output_verbose[11] = temp_string[1];
+    139              output_verbose[12] = temp_string[2];
+    140              output_verbose[13] = temp_string[3];
+    141              output_verbose[14] = temp_string[4];
+    142              output_verbose[15] = temp_string[5];
     143          
-    144              output_verbose[40] = '0'+(msg[2]/10)%10;
-    145              output_verbose[42] = '0'+(msg[2]%10);
-    146              output_verbose[4] = addr[0];
-    147              output_verbose[5] = addr[1];
-    148              output_verbose[6] = addr[2];
-    149              output_verbose[7] = addr[3];
+    144              output_verbose[39] = '0'+(msg[2]/10)%10;
+    145              output_verbose[41] = '0'+(msg[2]%10);
+    146              output_verbose[3] = addr[0];
+    147              output_verbose[4] = addr[1];
+    148              output_verbose[5] = addr[2];
+    149              output_verbose[6] = addr[3];
     150              
-    151              output_verbose[20] = msg[3];
-    152              output_verbose[24] = msg[4];
-    153              output_verbose[28] = msg[5];
-    154              output_verbose[32] = msg[6];
-    155              output_verbose[36] = '-';
+    151              output_verbose[19] = msg[3];
+    152              output_verbose[23] = msg[4];
+    153              output_verbose[27] = msg[5];
+    154              output_verbose[31] = msg[6];
+    155              output_verbose[35] = '-';
     156          
     157              TXString(output_verbose, sizeof output_verbose );
     158            }
@@ -313,9 +313,8 @@ C:\Users\mscottnelson\Documents\GitHub\boss\firmware\Applications\virtual_com_cm
 
    Bytes  Function/Label
    -----  --------------
+      54  ?<Constant "\rN:XXXX T:-XX.XF B:X ...">
       26  ?<Constant "\r\n$ADDR,-XX.XC,V.C,RS...">
-      54  ?<Constant "\r\nN:XXXX T:-XX.XC B:X...">
-       1  ?<Initializer for degCMode>
        1  ?<Initializer for verboseMode>
        8  ??Subroutine0_0
        6  ??Subroutine6_0
@@ -347,12 +346,13 @@ C:\Users\mscottnelson\Documents\GitHub\boss\firmware\Applications\virtual_com_cm
  828 bytes in segment CODE
    9 bytes in segment DATA16_AN
   80 bytes in segment DATA16_C
-   2 bytes in segment DATA16_I
-   2 bytes in segment DATA16_ID
+   1 byte  in segment DATA16_I
+   1 byte  in segment DATA16_ID
+   1 byte  in segment DATA16_Z
    2 bytes in segment INTVEC
  
  828 bytes of CODE  memory
-  82 bytes of CONST memory (+ 2 bytes shared)
+  81 bytes of CONST memory (+ 2 bytes shared)
    2 bytes of DATA  memory (+ 9 bytes shared)
 
 Errors: none

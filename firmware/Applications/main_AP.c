@@ -284,7 +284,7 @@ void main (void)
       char msg [7];
       char addr[] = {"HUB0"};
       char rssi[] = {"000"};
-      int degC, volt, bend;
+      int degC, volt, bend, pressure;
       volatile long temp;
       int results[6];
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -328,7 +328,24 @@ void main (void)
       ADC10CTL0 &= ~ENC;
       ADC10CTL0 &= ~(REFON + ADC10ON);
     
-//////////////////////////////////////////////////////////////////////////////////////////////////    
+////////////////////////////////////////////////////////////////////////////////////////////////// 
+/* MESN Get voltage from Channel A1 left intentionally blank */    
+//////////////////////////////////////////////////////////////////////////////////////////////////
+/* MESN Get voltage from Channel A2 */     
+// Pressure sensor
+     
+      ADC10CTL1 = INCH_0;                     // selects channel 0 
+      ADC10CTL0 = SREF_1 + ADC10SHT_2 + REFON + ADC10ON + ADC10IE + REF2_5V;
+      __delay_cycles(240);
+      ADC10CTL0 |= ENC + ADC10SC;             // Sampling and conversion start
+      __bis_SR_register(CPUOFF + GIE);        // LPM0 with interrupts enabled
+      results[4] = ADC10MEM;                  // Retrieve result
+      
+      /* Stop and turn off ADC */
+      ADC10CTL0 &= ~ENC;
+      ADC10CTL0 &= ~(REFON + ADC10ON);
+    
+//////////////////////////////////////////////////////////////////////////////////////////////////
 
       /* oC = ((A10/1024)*1500mV)-986mV)*1/3.55mV = A10*423/1024 - 278
        * the temperature is transmitted as an integer where 32.1 = 321
@@ -355,12 +372,21 @@ void main (void)
       }else{
         bend = '0';
       }
+      
+      temp = results[4];
+      if(temp > 1000) //'on' cutoff point
+      {
+        pressure = '1';
+      }else{
+        pressure = '0';
+      }
+      
       /* Package up the data */
       msg[0] = degC&0xFF;
       msg[1] = (degC>>8)&0xFF;
       msg[2] = volt;
       msg[3] = bend;
-      msg[4] = 'b';
+      msg[4] = pressure;
       msg[5] = 'c';
       msg[6] = 'd';
 

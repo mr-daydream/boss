@@ -212,7 +212,7 @@ static void linkTo()
     /* Time to measure */
     if (sSelfMeasureSem) {
       volatile long temp;
-      int degC, volt;
+      int degC, volt, bend, pressure, piezo;
       int results[6];
 #ifdef APP_AUTO_ACK
       uint8_t      noAck;
@@ -251,6 +251,36 @@ static void linkTo()
       ADC10CTL0 &= ~ENC;
       ADC10CTL0 &= ~(REFON + ADC10ON);
 
+      ////////////////////////////////////////////////////////////////////////////////////////////////// 
+/* MESN Get voltage from Channel A1  */
+// Piezo motion
+
+      ADC10CTL1 = INCH_0;                     // selects channel 0 
+      ADC10CTL0 = SREF_1 + ADC10SHT_2 + REFON + ADC10ON + ADC10IE + REF2_5V;
+      __delay_cycles(240);
+      ADC10CTL0 |= ENC + ADC10SC;             // Sampling and conversion start
+      __bis_SR_register(CPUOFF + GIE);        // LPM0 with interrupts enabled
+      results[3] = ADC10MEM;                  // Retrieve result
+      
+      /* Stop and turn off ADC */
+      ADC10CTL0 &= ~ENC;
+      ADC10CTL0 &= ~(REFON + ADC10ON);
+      
+//////////////////////////////////////////////////////////////////////////////////////////////////
+/* MESN Get voltage from Channel A2 */     
+// Pressure sensor
+     
+      ADC10CTL1 = INCH_0;                     // selects channel 0 
+      ADC10CTL0 = SREF_1 + ADC10SHT_2 + REFON + ADC10ON + ADC10IE + REF2_5V;
+      __delay_cycles(240);
+      ADC10CTL0 |= ENC + ADC10SC;             // Sampling and conversion start
+      __bis_SR_register(CPUOFF + GIE);        // LPM0 with interrupts enabled
+      results[4] = ADC10MEM;                  // Retrieve result
+      
+      /* Stop and turn off ADC */
+      ADC10CTL0 &= ~ENC;
+      ADC10CTL0 &= ~(REFON + ADC10ON);
+    
       /* oC = ((A10/1024)*1500mV)-986mV)*1/3.55mV = A10*423/1024 - 278
        * the temperature is transmitted as an integer where 32.1 = 321
        * hence 4230 instead of 423
@@ -275,6 +305,23 @@ static void linkTo()
         bend = '1';
       }else{
         bend = '0';
+      }
+      temp = results[4];
+      
+      //TODO: this almost certainly does not work appropriately atm
+      if(temp > 1000) //'on' cutoff point
+      {
+        piezo = '1';
+      }else{
+        piezo = '0';
+      }
+      
+      temp = results[4];
+      if(temp > 1000) //'on' cutoff point
+      {
+        pressure = '1';
+      }else{
+        pressure = '0';
       }
       msg[0] = degC&0xFF;
       msg[1] = (degC>>8)&0xFF;
