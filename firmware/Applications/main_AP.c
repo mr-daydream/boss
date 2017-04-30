@@ -109,7 +109,6 @@
 #include "nwk_frame.h"
 #include "nwk.h"
 #include "virtual_com_cmds.h"
-#include <stdio.h>
 
 /****************** COMMENTS ON ASYNC LISTEN APPLICATION ***********************
 Summary:
@@ -345,9 +344,10 @@ void main (void)
       temp = results[1];
       volt = (temp*25)/512;
 
-      //MESN this is arbitrary scaling towards a 0-127 range for ASCII conversion
-      //TODO: move to ED
+      //MESN this is arbitrary scaling towards a 0-127 range for ASCII conversion if later desired
+      //if this approach is actually wanted, check voltage levels and scale more appropriately
       //temp = (results[2] - 500)/6;
+
       temp = results[2];
       if(temp > 1000) //'on' cutoff point
       {
@@ -446,11 +446,20 @@ static uint8_t sCB(linkID_t lid)
 
 static void processMessage(linkID_t lid, uint8_t *msg, uint8_t len)
 {
-  /* do something useful */
+  //MESN not sure the below is the correct way to make the conversion from uint8_t
+  char c[] = {"BED0"};
+  c[3] = lid & 0xFF; //aim is to replace the final char with the id of the EP
+  char temprssi[] = {"000"}; //not sure how to use rssi
+  char tempMsg[] = {"abcdefgh"}; //*msg needs to have its type converted to char and replace this
+  
   if (len)
   {
     BSP_TOGGLE_LED1();
+    /* MESN TODO: Check that this ED message sends over AP serial */
+    transmitDataString(1, c, temprssi, tempMsg);
   }
+  
+ 
   return;
 }
 

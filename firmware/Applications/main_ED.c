@@ -213,7 +213,7 @@ static void linkTo()
     if (sSelfMeasureSem) {
       volatile long temp;
       int degC, volt;
-      int results[2];
+      int results[6];
 #ifdef APP_AUTO_ACK
       uint8_t      noAck;
       smplStatus_t rc;
@@ -240,7 +240,12 @@ static void linkTo()
       results[1] = ADC10MEM;                  // Retrieve result
 
       /* Get Bend input */
-      
+      ADC10CTL1 = INCH_0;                     // selects channel 0 
+      ADC10CTL0 = SREF_1 + ADC10SHT_2 + REFON + ADC10ON + ADC10IE + REF2_5V;
+      __delay_cycles(240);
+      ADC10CTL0 |= ENC + ADC10SC;             // Sampling and conversion start
+      __bis_SR_register(CPUOFF + GIE);        // LPM0 with interrupts enabled
+      results[2] = ADC10MEM;                  // Retrieve result
       
       /* Stop and turn off ADC */
       ADC10CTL0 &= ~ENC;
@@ -265,10 +270,16 @@ static void linkTo()
       */
       temp = results[1];
       volt = (temp*25)/512;
+      if(results[2] > 1000) //'on' cutoff point
+      {
+        bend = '1';
+      }else{
+        bend = '0';
+      }
       msg[0] = degC&0xFF;
       msg[1] = (degC>>8)&0xFF;
       msg[2] = volt;
-      msg[3] = 'w';
+      msg[3] = bend;
       msg[4] = 'x';
       msg[5] = 'y';
       msg[6] = 'z';

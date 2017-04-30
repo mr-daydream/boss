@@ -39,7 +39,6 @@
             <file>$PROJ_DIR$\CC2500 Sensor Demo-Access Point\Obj\nwk_link.pbi</file>
             <file>$PROJ_DIR$\CC2500 Sensor Demo-Access Point\Obj\nwk_join.r43</file>
             <file>$PROJ_DIR$\Components\bsp\drivers\bsp_leds.h</file>
-            <file>$TOOLKIT_DIR$\inc\clib\stdio.h</file>
             <file>$PROJ_DIR$\Components\mrfi\radios\family1\mrfi_spi.h</file>
             <file>$PROJ_DIR$\CC2500 Sensor Demo-Access Point\List\nwk_security.lst</file>
             <file>$TOOLKIT_DIR$\inc\msp430x22x4.h</file>
@@ -47,7 +46,6 @@
             <file>$PROJ_DIR$\Components\bsp\boards\EZ430RF\bsp_external\mrfi_board.c</file>
             <file>$PROJ_DIR$\Components\mrfi\radios\common\mrfi_f1f2.c</file>
             <file>$PROJ_DIR$\CC2500 Sensor Demo-Access Point\List\nwk_ping.lst</file>
-            <file>$TOOLKIT_DIR$\inc\clib\stdarg.h</file>
             <file>$PROJ_DIR$\CC2500 Sensor Demo-Access Point\Obj\nwk_security.pbi</file>
             <file>$PROJ_DIR$\CC2500 Sensor Demo-Access Point\Obj\nwk_link.r43</file>
             <file>$PROJ_DIR$\CC2500 Sensor Demo-Access Point\List\Sensor_Demo_AP_as_Data_Hub.map</file>
@@ -139,13 +137,13 @@
             <outputs>
                 <tool>
                     <name>XLINK</name>
-                    <file> 45 1</file>
+                    <file> 43 1</file>
                 </tool>
             </outputs>
             <inputs>
                 <tool>
                     <name>XLINK</name>
-                    <file> 118 54 52 53 110 20 121 4 13 127 32 44 60 108 21 123 27 9 63</file>
+                    <file> 116 52 50 51 108 20 119 4 13 125 32 42 58 106 21 121 27 9 61</file>
                 </tool>
             </inputs>
         </file>
@@ -154,7 +152,7 @@
             <outputs>
                 <tool>
                     <name>ICC430</name>
-                    <file> 12 110</file>
+                    <file> 12 108</file>
                 </tool>
                 <tool>
                     <name>BICOMP</name>
@@ -164,11 +162,11 @@
             <inputs>
                 <tool>
                     <name>ICC430</name>
-                    <file> 124 113 46 28 69 112 55 56 47 19 22 66 86 76 72 100 82 74 73 102 93 89 97 105 96 91 94 99</file>
+                    <file> 122 111 44 28 67 110 53 54 45 19 22 64 84 74 70 98 80 72 71 100 91 87 95 103 94 89 92 97</file>
                 </tool>
                 <tool>
                     <name>BICOMP</name>
-                    <file> 99 66 105 82 47 72 69 76 73 28 112 22 19 102 100 74 94 86 55 56 89 91 46 93 97 96</file>
+                    <file> 97 64 103 80 45 70 67 74 71 28 110 22 19 100 98 72 92 84 53 54 87 89 44 91 95 94</file>
                 </tool>
             </inputs>
         </file>
@@ -183,7 +181,7 @@
             <inputs>
                 <tool>
                     <name>A430</name>
-                    <file> 37</file>
+                    <file> 36</file>
                 </tool>
             </inputs>
         </file>
@@ -192,7 +190,7 @@
             <outputs>
                 <tool>
                     <name>ICC430</name>
-                    <file> 64 27</file>
+                    <file> 62 27</file>
                 </tool>
                 <tool>
                     <name>BICOMP</name>
@@ -202,11 +200,11 @@
             <inputs>
                 <tool>
                     <name>ICC430</name>
-                    <file> 124 113 46 28 69 112 55 56 47 19 22 66 86 84</file>
+                    <file> 122 111 44 28 67 110 53 54 45 19 22 64 84 82</file>
                 </tool>
                 <tool>
                     <name>BICOMP</name>
-                    <file> 86 55 22 84 69 28 112 66 56 19 46 47</file>
+                    <file> 84 53 22 82 67 28 110 64 54 19 44 45</file>
                 </tool>
             </inputs>
         </file>
@@ -215,7 +213,7 @@
             <outputs>
                 <tool>
                     <name>ICC430</name>
-                    <file> 29 54</file>
+                    <file> 29 52</file>
                 </tool>
                 <tool>
                     <name>BICOMP</name>
@@ -225,11 +223,11 @@
             <inputs>
                 <tool>
                     <name>ICC430</name>
-                    <file> 124 113 69 112 55 56 47 19 22 66 86 25 10 51 33 67 18 115 68 16 14 11</file>
+                    <file> 122 111 67 110 53 54 45 19 22 64 84 25 10 49 33 65 18 113 66 16 14 11</file>
                 </tool>
                 <tool>
                     <name>BICOMP</name>
-                    <file> 67 10 18 112 55 56 16 22 19 33 68 25 51 86 66 47 69 14 115 11</file>
+                    <file> 65 10 18 110 53 54 16 22 19 33 66 25 49 84 64 45 67 14 113 11</file>
                 </tool>
             </inputs>
         </file>
@@ -238,21 +236,21 @@
             <outputs>
                 <tool>
                     <name>ICC430</name>
-                    <file> 62 121</file>
+                    <file> 60 119</file>
                 </tool>
                 <tool>
                     <name>BICOMP</name>
-                    <file> 49</file>
+                    <file> 47</file>
                 </tool>
             </outputs>
             <inputs>
                 <tool>
                     <name>ICC430</name>
-                    <file> 124 113 46 28 69 112 55 56 47 19 22 66 86 76 72 100 82 74 73 102 93 89 97 105 96 91 99 94</file>
+                    <file> 122 111 44 28 67 110 53 54 45 19 22 64 84 74 70 98 80 72 71 100 91 87 95 103 94 89 97 92</file>
                 </tool>
                 <tool>
                     <name>BICOMP</name>
-                    <file> 19 94 86 55 105 82 56 76 73 96 22 102 69 100 74 99 97 28 112 66 47 72 89 91 46 93</file>
+                    <file> 19 92 84 53 103 80 54 74 71 94 22 100 67 98 72 97 95 28 110 64 45 70 87 89 44 91</file>
                 </tool>
             </inputs>
         </file>
@@ -261,7 +259,7 @@
             <outputs>
                 <tool>
                     <name>ICC430</name>
-                    <file> 119 52</file>
+                    <file> 117 50</file>
                 </tool>
                 <tool>
                     <name>BICOMP</name>
@@ -271,11 +269,11 @@
             <inputs>
                 <tool>
                     <name>ICC430</name>
-                    <file> 124 113 46 28 69 112 55 56 47 19 22 66 86 76 72 33 67 18 115 68 16 100 79 82 74 84 34 42</file>
+                    <file> 122 111 44 28 67 110 53 54 45 19 22 64 84 74 70 33 65 18 113 66 16 98 77 80 72 82</file>
                 </tool>
                 <tool>
                     <name>BICOMP</name>
-                    <file> 72 74 56 69 86 115 55 19 68 28 76 79 34 22 18 33 100 82 84 112 66 47 46 67 16 42</file>
+                    <file> 45 72 70 113 64 110 74 77 28 22 19 65 67 33 98 80 82 84 53 54 16 44 18 66</file>
                 </tool>
             </inputs>
         </file>
@@ -284,21 +282,21 @@
             <outputs>
                 <tool>
                     <name>ICC430</name>
-                    <file> 120 53</file>
+                    <file> 118 51</file>
                 </tool>
                 <tool>
                     <name>BICOMP</name>
-                    <file> 117</file>
+                    <file> 115</file>
                 </tool>
             </outputs>
             <inputs>
                 <tool>
                     <name>ICC430</name>
-                    <file> 124 113 72 69 112 55 56 47 19 22 66 86 122 46 28 76 26 35 7 59 50 40 39</file>
+                    <file> 122 111 70 67 110 53 54 45 19 22 64 84 120 44 28 74 26 34 7 57 48 39 38</file>
                 </tool>
                 <tool>
                     <name>BICOMP</name>
-                    <file> 47 40 66 69 122 112 22 19 35 28 72 50 39 86 55 56 46 26 76 7 59</file>
+                    <file> 45 39 64 67 120 110 22 19 34 28 70 48 38 84 53 54 44 26 74 7 57</file>
                 </tool>
             </inputs>
         </file>
@@ -307,122 +305,7 @@
             <outputs>
                 <tool>
                     <name>ICC430</name>
-                    <file> 58 20</file>
-                </tool>
-                <tool>
-                    <name>BICOMP</name>
-                    <file> 111</file>
-                </tool>
-            </outputs>
-            <inputs>
-                <tool>
-                    <name>ICC430</name>
-                    <file> 124 113 46 28 69 112 55 56 47 19 22 66 86 76 72 100 79 82 74 73 102 93 89 97 105 96 91 94</file>
-                </tool>
-                <tool>
-                    <name>BICOMP</name>
-                    <file> 22 69 89 76 112 72 79 28 19 74 102 66 47 91 100 82 73 94 86 55 56 105 46 93 97 96</file>
-                </tool>
-            </inputs>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\Components\simpliciti\nwk\nwk_globals.c</name>
-            <outputs>
-                <tool>
-                    <name>ICC430</name>
-                    <file> 114 13</file>
-                </tool>
-                <tool>
-                    <name>BICOMP</name>
-                    <file> 61</file>
-                </tool>
-            </outputs>
-            <inputs>
-                <tool>
-                    <name>ICC430</name>
-                    <file> 124 113 46 28 69 112 55 56 47 19 22 66 86 76 72 100 94</file>
-                </tool>
-                <tool>
-                    <name>BICOMP</name>
-                    <file> 47 94 72 69 76 86 55 100 28 112 66 22 19 46 56</file>
-                </tool>
-            </inputs>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\Components\simpliciti\nwk_applications\nwk_mgmt.c</name>
-            <outputs>
-                <tool>
-                    <name>ICC430</name>
-                    <file> 38 60</file>
-                </tool>
-                <tool>
-                    <name>BICOMP</name>
-                    <file> 17</file>
-                </tool>
-            </outputs>
-            <inputs>
-                <tool>
-                    <name>ICC430</name>
-                    <file> 124 113 46 28 69 112 55 56 47 19 22 66 86 76 72 100 79 82 74 97 105 94 99</file>
-                </tool>
-                <tool>
-                    <name>BICOMP</name>
-                    <file> 66 105 79 47 72 69 76 74 99 28 112 22 19 100 82 97 94 86 55 56 46</file>
-                </tool>
-            </inputs>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\Components\simpliciti\nwk_applications\nwk_ping.c</name>
-            <outputs>
-                <tool>
-                    <name>ICC430</name>
-                    <file> 41 108</file>
-                </tool>
-                <tool>
-                    <name>BICOMP</name>
-                    <file> 107</file>
-                </tool>
-            </outputs>
-            <inputs>
-                <tool>
-                    <name>ICC430</name>
-                    <file> 124 113 46 28 69 112 55 56 47 19 22 66 86 76 72 100 82 74 93 94 79 102 96</file>
-                </tool>
-                <tool>
-                    <name>BICOMP</name>
-                    <file> 112 79 22 82 28 19 76 93 96 66 47 72 69 100 74 94 102 86 55 56 46</file>
-                </tool>
-            </inputs>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\Components\simpliciti\nwk_applications\nwk_security.c</name>
-            <outputs>
-                <tool>
-                    <name>ICC430</name>
-                    <file> 36 123</file>
-                </tool>
-                <tool>
-                    <name>BICOMP</name>
-                    <file> 43</file>
-                </tool>
-            </outputs>
-            <inputs>
-                <tool>
-                    <name>ICC430</name>
-                    <file> 124 113 46 28 76 69 112 55 56 47 19 22 66 86 72 100 96 82 74</file>
-                </tool>
-                <tool>
-                    <name>BICOMP</name>
-                    <file> 19 82 72 112 22 100 66 47 76 96 74 28 69 86 55 56 46</file>
-                </tool>
-            </inputs>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\Components\simpliciti\nwk\nwk_QMgmt.c</name>
-            <outputs>
-                <tool>
-                    <name>ICC430</name>
-                    <file> 126 21</file>
+                    <file> 56 20</file>
                 </tool>
                 <tool>
                     <name>BICOMP</name>
@@ -432,11 +315,126 @@
             <inputs>
                 <tool>
                     <name>ICC430</name>
-                    <file> 124 113 22 46 28 69 112 55 56 47 19 66 86 76 72 100 74 82 99 97</file>
+                    <file> 122 111 44 28 67 110 53 54 45 19 22 64 84 74 70 98 77 80 72 71 100 91 87 95 103 94 89 92</file>
                 </tool>
                 <tool>
                     <name>BICOMP</name>
-                    <file> 69 28 97 19 100 112 22 82 66 47 46 76 74 99 86 55 56 72</file>
+                    <file> 22 67 87 74 110 70 77 28 19 72 100 64 45 89 98 80 71 92 84 53 54 103 44 91 95 94</file>
+                </tool>
+            </inputs>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\Components\simpliciti\nwk\nwk_globals.c</name>
+            <outputs>
+                <tool>
+                    <name>ICC430</name>
+                    <file> 112 13</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 59</file>
+                </tool>
+            </outputs>
+            <inputs>
+                <tool>
+                    <name>ICC430</name>
+                    <file> 122 111 44 28 67 110 53 54 45 19 22 64 84 74 70 98 92</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 45 92 70 67 74 84 53 98 28 110 64 22 19 44 54</file>
+                </tool>
+            </inputs>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\Components\simpliciti\nwk_applications\nwk_mgmt.c</name>
+            <outputs>
+                <tool>
+                    <name>ICC430</name>
+                    <file> 37 58</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 17</file>
+                </tool>
+            </outputs>
+            <inputs>
+                <tool>
+                    <name>ICC430</name>
+                    <file> 122 111 44 28 67 110 53 54 45 19 22 64 84 74 70 98 77 80 72 95 103 92 97</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 64 103 77 45 70 67 74 72 97 28 110 22 19 98 80 95 92 84 53 54 44</file>
+                </tool>
+            </inputs>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\Components\simpliciti\nwk_applications\nwk_ping.c</name>
+            <outputs>
+                <tool>
+                    <name>ICC430</name>
+                    <file> 40 106</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 105</file>
+                </tool>
+            </outputs>
+            <inputs>
+                <tool>
+                    <name>ICC430</name>
+                    <file> 122 111 44 28 67 110 53 54 45 19 22 64 84 74 70 98 80 72 91 92 77 100 94</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 110 77 22 80 28 19 74 91 94 64 45 70 67 98 72 92 100 84 53 54 44</file>
+                </tool>
+            </inputs>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\Components\simpliciti\nwk_applications\nwk_security.c</name>
+            <outputs>
+                <tool>
+                    <name>ICC430</name>
+                    <file> 35 121</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 41</file>
+                </tool>
+            </outputs>
+            <inputs>
+                <tool>
+                    <name>ICC430</name>
+                    <file> 122 111 44 28 74 67 110 53 54 45 19 22 64 84 70 98 94 80 72</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 19 80 70 110 22 98 64 45 74 94 72 28 67 84 53 54 44</file>
+                </tool>
+            </inputs>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\Components\simpliciti\nwk\nwk_QMgmt.c</name>
+            <outputs>
+                <tool>
+                    <name>ICC430</name>
+                    <file> 124 21</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 107</file>
+                </tool>
+            </outputs>
+            <inputs>
+                <tool>
+                    <name>ICC430</name>
+                    <file> 122 111 22 44 28 67 110 53 54 45 19 64 84 74 70 98 72 80 97 95</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 67 28 95 19 98 110 22 80 64 45 44 74 72 97 84 53 54 70</file>
                 </tool>
             </inputs>
         </file>
@@ -449,17 +447,17 @@
                 </tool>
                 <tool>
                     <name>BICOMP</name>
-                    <file> 57</file>
+                    <file> 55</file>
                 </tool>
             </outputs>
             <inputs>
                 <tool>
                     <name>ICC430</name>
-                    <file> 124 113 46 28 69 112 55 56 47 19 22 66 86 76 72 100 74 82 102 94 79 96</file>
+                    <file> 122 111 44 28 67 110 53 54 45 19 22 64 84 74 70 98 72 80 100 92 77 94</file>
                 </tool>
                 <tool>
                     <name>BICOMP</name>
-                    <file> 86 55 79 19 74 56 69 76 102 22 100 82 94 96 28 112 66 47 72 46</file>
+                    <file> 84 53 77 19 72 54 67 74 100 22 98 80 92 94 28 110 64 45 70 44</file>
                 </tool>
             </inputs>
         </file>
@@ -468,7 +466,7 @@
             <outputs>
                 <tool>
                     <name>ICC430</name>
-                    <file> 15 127</file>
+                    <file> 15 125</file>
                 </tool>
                 <tool>
                     <name>BICOMP</name>
@@ -478,11 +476,11 @@
             <inputs>
                 <tool>
                     <name>ICC430</name>
-                    <file> 124 113 46 28 69 112 55 56 47 19 22 66 86 76 72 100 82 74 91 94 96 105</file>
+                    <file> 122 111 44 28 67 110 53 54 45 19 22 64 84 74 70 98 80 72 89 92 94 103</file>
                 </tool>
                 <tool>
                     <name>BICOMP</name>
-                    <file> 96 56 69 82 86 55 19 76 91 105 22 100 74 94 28 112 66 47 72 46</file>
+                    <file> 94 54 67 80 84 53 19 74 89 103 22 98 72 92 28 110 64 45 70 44</file>
                 </tool>
             </inputs>
         </file>
@@ -495,17 +493,17 @@
                 </tool>
                 <tool>
                     <name>BICOMP</name>
-                    <file> 65</file>
+                    <file> 63</file>
                 </tool>
             </outputs>
             <inputs>
                 <tool>
                     <name>ICC430</name>
-                    <file> 124 113 46 28 69 112 55 56 47 19 22 66 86 76 72 100 79 82 74 89 105 94 102 96 97</file>
+                    <file> 122 111 44 28 67 110 53 54 45 19 22 64 84 74 70 98 77 80 72 87 103 92 100 94 95</file>
                 </tool>
                 <tool>
                     <name>BICOMP</name>
-                    <file> 105 22 79 97 76 74 102 86 55 56 19 69 100 82 89 94 96 28 112 66 47 72 46</file>
+                    <file> 103 22 77 95 74 72 100 84 53 54 19 67 98 80 87 92 94 28 110 64 45 70 44</file>
                 </tool>
             </inputs>
         </file>
@@ -514,7 +512,7 @@
             <outputs>
                 <tool>
                     <name>ICC430</name>
-                    <file> 125 44</file>
+                    <file> 123 42</file>
                 </tool>
                 <tool>
                     <name>BICOMP</name>
@@ -524,11 +522,11 @@
             <inputs>
                 <tool>
                     <name>ICC430</name>
-                    <file> 124 113 46 28 69 112 55 56 47 19 22 66 86 76 72 100 79 82 74 89 94 96</file>
+                    <file> 122 111 44 28 67 110 53 54 45 19 22 64 84 74 70 98 77 80 72 87 92 94</file>
                 </tool>
                 <tool>
                     <name>BICOMP</name>
-                    <file> 94 22 79 76 74 86 55 56 19 69 100 82 89 96 28 112 66 47 72 46</file>
+                    <file> 92 22 77 74 72 84 53 54 19 67 98 80 87 94 28 110 64 45 70 44</file>
                 </tool>
             </inputs>
         </file>
@@ -541,7 +539,7 @@
                 </tool>
                 <tool>
                     <name>XLINK</name>
-                    <file> 48 45 1</file>
+                    <file> 46 43 1</file>
                 </tool>
             </outputs>
         </file>
