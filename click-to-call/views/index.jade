@@ -1,0 +1,45 @@
+doctype html
+html(lang="en")
+  head
+    title Click To Call Tutorial
+
+    // We use Twitter Bootstrap as the default styling for our page
+    link(rel='stylesheet', 
+      href='//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css')
+    link(rel='stylesheet', 
+      href='//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css')
+
+    // Include CSS for our third-party telephone input jQuery plugin
+    link(rel='stylesheet', href='/vendor/intl-phone/css/intlTelInput.css')
+  body
+    .container
+      h1 Counted Baltimore
+      p.
+        This is an application that will allow you to call and find out about available up to the minute bed space in shelters in  Baltimore City!.
+        
+      hr
+
+      // C2C contact form
+      .row
+        .col-md-12
+          form(id='contactForm', role='form')
+            .form-group
+              h3 Be Counted
+              p.help-block.
+                This is an application that will allow you to call and find out about available up to the minute bed space in shelters in  Baltimore City!
+            label Your Number
+            .form-group
+              input.form-control(type='text', id='phoneNumber', 
+                placeholder='(651) 555-7889')
+            label Sales Team Number 
+            .form-group
+              input.form-control(type='text', id='salesNumber', 
+                placeholder='(651) 555-7889')
+            button(type='submit', class='btn btn-default') Contact Sales
+
+    // Include page dependencies
+    script(src='//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js')
+    script(src='/vendor/intl-phone/js/intlTelInput.min.js')
+
+    // Our app's front-end JavaScript logic
+    script(src='/app.js')
