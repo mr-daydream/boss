@@ -126,9 +126,9 @@ void transmitDataString(char data_mode, char addr[4],char rssi[3], char msg[MESS
 
   if(data_mode & verboseMode)
   {
-  char output_verbose[] = {"\r\nN:XXXX T:-XX.XC B:X P:X T:X G:X I:X B:X.XV Str:XXX%"};
+  char output_verbose[] = {"\r\nN:XXXX T:-XX.XF B:X P:X T:X G:X I:X B:X.XV Str:XXX%"};
  //   char output_verbose[] = {"\r\nNode:XXXX,Temp:-XX.XC,Battery:X.XV,Strength:XXX%,RE:no "};
- 
+ //N:Node-identifier T:Temperature B:Bend P:Pressure T:Touch G:Gyro I:Infrared B:Battery
 
     output_verbose[49] = rssi[0];
     output_verbose[50] = rssi[1];
