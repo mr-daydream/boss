@@ -15,18 +15,19 @@ array = []
 #        for line in content:
 while True:
         line = ser.readline()
-        mydict = dict(item.split(':') for item in line.split())
-        tempmsg = "center1.bed%s.temp %s %i\n" % (mydict['N'][-1:], mydict['T'], int(time.time())) 
-        print 'sending message:\n%s' % tempmsg
+        if len(line) == 51:
+            mydict = dict(item.split(':') for item in line.split())
+            tempmsg = "center1.bed%s.temp %s %i\n" % (mydict['N'][-1:], mydict['T'], int(time.time())) 
+            print 'sending message:\n%s' % tempmsg
        #sock = socket.socket()
        #sock.connect((CARBON_SERVER, CARBON_PORT))
        #sock.sendall(tempmsg)
        #sock.close()
-        bendmsg = "center1.bed%s.bend %s %i\n" % (mydict['N'][-1:], mydict['B'], int(time.time())) 
-        print 'sending message:\n%s' % bendmsg
+            bendmsg = "center1.bed%s.bend %s %i\n" % (mydict['N'][-1:], mydict['B'], int(time.time())) 
+            print 'sending message:\n%s' % bendmsg
        #sock = socket.socket()
        #sock.connect((CARBON_SERVER, CARBON_PORT))
        #sock.sendall(bendmsg)
        #sock.close()
-        time.sleep(1)
+            time.sleep(1)
 ser.close()
