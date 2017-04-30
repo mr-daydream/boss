@@ -1,0 +1,359 @@
+###############################################################################
+#
+# IAR C/C++ Compiler V7.10.1.973/W32 for MSP430           30/Apr/2017  00:51:52
+# Copyright 1996-2017 IAR Systems AB.
+# Evaluation license - IAR Embedded Workbench for Texas Instruments MSP430, Evaluation Version 7.10
+#
+#    __rt_version  =  3
+#    __double_size =  32
+#    __reg_r4      =  free
+#    __reg_r5      =  free
+#    __pic         =  no
+#    __core        =  430
+#    Source file   =  
+#        C:\Users\mscottnelson\Documents\GitHub\boss\firmware\Applications\virtual_com_cmds.c
+#    Command line  =  
+#        -f C:\Users\MSCOTT~1\AppData\Local\Temp\EW1603.tmp (-f
+#        C:\Users\mscottnelson\Documents\GitHub\boss\firmware\Configuration\smpl_config_AP.dat
+#        (-DNUM_CONNECTIONS=8 -DSIZE_INFRAME_Q=6 -DSIZE_OUTFRAME_Q=2
+#        "-DTHIS_DEVICE_ADDRESS={0x78, 0x56, 0x34, 0x12}" -DACCESS_POINT
+#        -DAP_IS_DATA_HUB -DNUM_STORE_AND_FWD_CLIENTS=3
+#        -DSTARTUP_JOINCONTEXT_ON) -f
+#        C:\Users\mscottnelson\Documents\GitHub\boss\firmware\Configuration\smpl_nwk_config.dat
+#        (-DMAX_HOPS=3 -DMAX_HOPS_FROM_AP=1 -DMAX_NWK_PAYLOAD=9
+#        -DMAX_APP_PAYLOAD=10 -DDEFAULT_LINK_TOKEN=0x01020304
+#        -DDEFAULT_JOIN_TOKEN=0x05060708 -DEXTENDED_API -DSW_TIMER)
+#        C:\Users\mscottnelson\Documents\GitHub\boss\firmware\Applications\virtual_com_cmds.c
+#        -D MRFI_CC2500 -lcN
+#        "C:\Users\mscottnelson\Documents\GitHub\boss\firmware\CC2500 Sensor
+#        Demo-Access Point\List" -o
+#        "C:\Users\mscottnelson\Documents\GitHub\boss\firmware\CC2500 Sensor
+#        Demo-Access Point\Obj" --debug -D__MSP430F2274__ -e --double=32 --clib
+#        -I
+#        C:\Users\mscottnelson\Documents\GitHub\boss\firmware\Components\bsp\
+#        -I
+#        C:\Users\mscottnelson\Documents\GitHub\boss\firmware\Components\bsp\drivers\
+#        -I
+#        C:\Users\mscottnelson\Documents\GitHub\boss\firmware\Components\bsp\boards\EZ430RF\
+#        -I
+#        C:\Users\mscottnelson\Documents\GitHub\boss\firmware\Components\mrfi\
+#        -I
+#        C:\Users\mscottnelson\Documents\GitHub\boss\firmware\Components\SimpliciTI\nwk\
+#        -I
+#        C:\Users\mscottnelson\Documents\GitHub\boss\firmware\Components\SimpliciTI\nwk_applications\
+#        -Ohz --require_prototypes --hw_workaround=nop_after_lpm)
+#    Locale        =  English_USA.1252
+#    List file     =  
+#        C:\Users\mscottnelson\Documents\GitHub\boss\firmware\CC2500 Sensor
+#        Demo-Access Point\List\virtual_com_cmds.lst
+#    Object file   =  
+#        C:\Users\mscottnelson\Documents\GitHub\boss\firmware\CC2500 Sensor
+#        Demo-Access Point\Obj\virtual_com_cmds.r43
+#
+###############################################################################
+
+C:\Users\mscottnelson\Documents\GitHub\boss\firmware\Applications\virtual_com_cmds.c
+      1          /*----------------------------------------------------------------------------
+      2           *  Demo Application for SimpliciTI
+      3           *
+      4           *  L. Friedman
+      5           *  Texas Instruments, Inc.
+      6           *----------------------------------------------------------------------------
+      7           */
+      8          
+      9          /**********************************************************************************************
+     10            Copyright 2007-2009 Texas Instruments Incorporated. All rights reserved.
+     11          
+     12            IMPORTANT: Your use of this Software is limited to those specific rights granted under
+     13            the terms of a software license agreement between the user who downloaded the software,
+     14            his/her employer (which must be your employer) and Texas Instruments Incorporated (the
+     15            "License"). You may not use this Software unless you agree to abide by the terms of the
+     16            License. The License limits your use, and you acknowledge, that the Software may not be
+     17            modified, copied or distributed unless embedded on a Texas Instruments microcontroller
+     18            or used solely and exclusively in conjunction with a Texas Instruments radio frequency
+     19            transceiver, which is integrated into your product. Other than for the foregoing purpose,
+     20            you may not use, reproduce, copy, prepare derivative works of, modify, distribute,
+     21            perform, display or sell this Software and/or its documentation for any purpose.
+     22          
+     23            YOU FURTHER ACKNOWLEDGE AND AGREE THAT THE SOFTWARE AND DOCUMENTATION ARE PROVIDED “AS IS”
+     24            WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION, ANY
+     25            WARRANTY OF MERCHANTABILITY, TITLE, NON-INFRINGEMENT AND FITNESS FOR A PARTICULAR PURPOSE.
+     26            IN NO EVENT SHALL TEXAS INSTRUMENTS OR ITS LICENSORS BE LIABLE OR OBLIGATED UNDER CONTRACT,
+     27            NEGLIGENCE, STRICT LIABILITY, CONTRIBUTION, BREACH OF WARRANTY, OR OTHER LEGAL EQUITABLE
+     28            THEORY ANY DIRECT OR INDIRECT DAMAGES OR EXPENSES INCLUDING BUT NOT LIMITED TO ANY
+     29            INCIDENTAL, SPECIAL, INDIRECT, PUNITIVE OR CONSEQUENTIAL DAMAGES, LOST PROFITS OR LOST
+     30            DATA, COST OF PROCUREMENT OF SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY
+     31            THIRD PARTIES (INCLUDING BUT NOT LIMITED TO ANY DEFENSE THEREOF), OR OTHER SIMILAR COSTS.
+     32          
+     33            Should you have any questions regarding your right to use this Software,
+     34            contact Texas Instruments Incorporated at www.TI.com.
+     35          **************************************************************************************************/
+     36          #include <string.h>
+     37          #include "bsp.h"
+     38          #include "virtual_com_cmds.h"
+     39          
+     40          static char verboseMode = 1;
+     41          static char degCMode = 1;
+     42          
+     43          /******************************************************************************/
+     44          // End Virtual Com Port Communication
+     45          /******************************************************************************/
+     46          void COM_Init()
+     47          {
+     48            P3SEL |= 0x30;                            // P3.4,5 = USCI_A0 TXD/RXD
+     49            UCA0CTL1 = UCSSEL_2;                      // SMCLK
+     50          
+     51          #if (BSP_CONFIG_CLOCK_MHZ_SELECT == 1)
+     52            UCA0BR0 = 104;                            // 9600 from 1Mhz
+     53            UCA0BR1 = 0;
+     54            UCA0MCTL = UCBRS_1;
+     55          #elif (BSP_CONFIG_CLOCK_MHZ_SELECT == 2)
+     56            UCA0BR0 = 0xDA;                           // 9600 from 2Mhz
+     57            UCA0BR1 = 0x0;
+     58            UCA0MCTL = UCBRS_6;
+     59          #elif (BSP_CONFIG_CLOCK_MHZ_SELECT == 4)
+     60            UCA0BR0 = 0xA0;                           // 9600 from 4Mhz
+     61            UCA0BR1 = 0x1;
+     62            UCA0MCTL = UCBRS_6;
+     63          #elif (BSP_CONFIG_CLOCK_MHZ_SELECT == 6)
+     64            UCA0BR0 = 0x7B;                           // 9600 from 6Mhz
+     65            UCA0BR1 = 0x2;
+     66            UCA0MCTL = UCBRS_3;
+     67          #elif (BSP_CONFIG_CLOCK_MHZ_SELECT == 8)
+     68            UCA0BR0 = 0x41;                           // 9600 from 8Mhz
+     69            UCA0BR1 = 0x3;
+     70            UCA0MCTL = UCBRS_2;
+     71          #elif (BSP_CONFIG_CLOCK_MHZ_SELECT == 10)
+     72            UCA0BR0 = 0x79;                           // 9600 from 10Mhz
+     73            UCA0BR1 = 0x4;
+     74            UCA0MCTL = UCBRS_7;
+     75          #elif (BSP_CONFIG_CLOCK_MHZ_SELECT == 12)
+     76            UCA0BR0 = 0xE2;                           // 9600 from 12Mhz
+     77            UCA0BR1 = 0x4;
+     78            UCA0MCTL = 0;
+     79          #elif (BSP_CONFIG_CLOCK_MHZ_SELECT == 16)
+     80            UCA0BR0 = 0x82;                           // 9600 from 16Mhz
+     81            UCA0BR1 = 0x6;
+     82            UCA0MCTL = UCBRS_6;
+     83          #else
+     84          #error "ERROR: Unsupported clock speed.  Custom clock speeds are possible. See comments in code."
+     85          #endif
+     86          
+     87            UCA0CTL1 &= ~UCSWRST;                     // **Initialize USCI state machine**
+     88            IE2 |= UCA0RXIE;                          // Enable USCI_A0 RX interrupt
+     89            __enable_interrupt();
+     90          }
+     91          
+     92          void TXString( char* string, int length )
+     93          {
+     94            int pointer;
+     95            for( pointer = 0; pointer < length; pointer++)
+     96            {
+     97              volatile int i;
+     98              UCA0TXBUF = string[pointer];
+     99              while (!(IFG2&UCA0TXIFG));              // USCI_A0 TX buffer ready?
+    100            }
+    101          }
+    102          
+    103          void transmitDataString(char data_mode, char addr[4],char rssi[3], char msg[MESSAGE_LENGTH] )
+    104          {
+    105            char temp_string[] = {"+XX.XC"};
+    106            int temp = msg[0] + (msg[1]<<8);
+    107          
+    108            if(!(data_mode & degCMode))
+    109            {
+    110              temp = (int)(((float)temp)*1.8)+320;
+    111              temp_string[5] = 'F';
+    112            }
+    113            if( temp < 0 )
+    114            {
+    115              temp_string[0] = '-';
+    116              temp = temp * -1;
+    117            }
+    118            else if( ((temp/1000)%10) != 0 )
+    119            {
+    120              //temp_string[0] = '0'+((temp/1000)%10);
+    121              temp_string[0] = '+';
+    122            }
+    123            temp_string[4] = '0'+(temp%10);
+    124            temp_string[2] = '0'+((temp/10)%10);
+    125            temp_string[1] = '0'+((temp/100)%10);
+    126          
+    127            if(data_mode & verboseMode)
+    128            {
+    129            char output_verbose[] = {"\r\nN:XXXX T:-XX.XC B:X P:X T:X G:X I:X B:X.XV Str:XXX%"};
+    130           //   char output_verbose[] = {"\r\nNode:XXXX,Temp:-XX.XC,Battery:X.XV,Strength:XXX%,RE:no "};
+    131           
+    132          
+    133              output_verbose[49] = rssi[0];
+    134              output_verbose[50] = rssi[1];
+    135              output_verbose[51] = rssi[2];
+    136          
+    137              output_verbose[11] = temp_string[0];
+    138              output_verbose[12] = temp_string[1];
+    139              output_verbose[13] = temp_string[2];
+    140              output_verbose[14] = temp_string[3];
+    141              output_verbose[15] = temp_string[4];
+    142              output_verbose[16] = temp_string[5];
+    143          
+    144              output_verbose[40] = '0'+(msg[2]/10)%10;
+    145              output_verbose[42] = '0'+(msg[2]%10);
+    146              output_verbose[4] = addr[0];
+    147              output_verbose[5] = addr[1];
+    148              output_verbose[6] = addr[2];
+    149              output_verbose[7] = addr[3];
+    150              
+    151              output_verbose[20] = msg[3];
+    152              output_verbose[24] = msg[4];
+    153              output_verbose[28] = msg[5];
+    154              output_verbose[32] = msg[6];
+    155              output_verbose[36] = '-';
+    156          
+    157              TXString(output_verbose, sizeof output_verbose );
+    158            }
+    159            else
+    160            {
+    161              char output_short[] = {"\r\n$ADDR,-XX.XC,V.C,RSI,N#"};
+    162          
+    163              output_short[19] = rssi[2];
+    164              output_short[20] = rssi[1];
+    165              output_short[21] = rssi[0];
+    166          
+    167          
+    168              output_short[8] = temp_string[0];
+    169              output_short[9] = temp_string[1];
+    170              output_short[10] = temp_string[2];
+    171              output_short[11] = temp_string[3];
+    172              output_short[12] = temp_string[4];
+    173              output_short[13] = temp_string[5];
+    174          
+    175              output_short[15] = '0'+(msg[2]/10)%10;
+    176              output_short[17] = '0'+(msg[2]%10);
+    177              output_short[3] = addr[0];
+    178              output_short[4] = addr[1];
+    179              output_short[5] = addr[2];
+    180              output_short[6] = addr[3];
+    181              TXString(output_short, sizeof output_short );
+    182            }
+    183          }
+    184          
+    185          void transmitData(int addr, signed char rssi,  char msg[MESSAGE_LENGTH] )
+    186          {
+    187            char addrString[4];
+    188            char rssiString[3];
+    189            volatile signed int rssi_int;
+    190          
+    191            addrString[0] = '0';
+    192            addrString[1] = '0';
+    193            addrString[2] = '0'+(((addr+1)/10)%10);
+    194            addrString[3] = '0'+((addr+1)%10);
+    195            rssi_int = (signed int) rssi;
+    196            rssi_int = rssi_int+128;
+    197            rssi_int = (rssi_int*100)/256;
+    198            rssiString[0] = '0'+(rssi_int%10);
+    199            rssiString[1] = '0'+((rssi_int/10)%10);
+    200            rssiString[2] = '0'+((rssi_int/100)%10);
+    201          
+    202            transmitDataString( degCMode, addrString, rssiString, msg );
+    203          }
+    204          
+    205          /*------------------------------------------------------------------------------
+    206          * USCIA interrupt service routine
+    207          ------------------------------------------------------------------------------*/
+    208          #pragma vector=USCIAB0RX_VECTOR
+    209          __interrupt void USCI0RX_ISR(void)
+    210          {
+    211            char rx = UCA0RXBUF;
+    212            if ( rx == 'V' || rx == 'v' )
+    213            {
+    214              verboseMode = 1;
+    215            }
+    216            else if ( rx == 'M' || rx == 'm' )
+    217            {
+    218              verboseMode = 0;
+    219            }
+    220            else if ( rx == 'F' || rx == 'f' )
+    221            {
+    222              degCMode = 0;
+    223            }
+    224            else if ( rx == 'C' || rx == 'c' )
+    225            {
+    226              degCMode = 1;
+    227            }
+    228          }
+
+   Maximum stack usage in bytes:
+
+   CSTACK Function
+   ------ --------
+      2   COM_Init
+      2   TXString
+      6   USCI0RX_ISR
+     22   transmitData
+       22   -> transmitDataString
+       22 ?DivMod16s
+       24 ?DivMod16s
+       24 ?DivMod16u
+       12 ?Epilogue5
+       22 ?Mul16
+    102   transmitDataString
+      102   -> TXString
+      102 ?CopyMemoryBytes
+      102 ?DivMod16s
+      102 ?DivMod16u
+      102 ?DivMod8u
+      106 ?DivMod8u
+       18 ?Epilogue8
+      102 _Cast32fto32s
+      102 _Cast32sto32f
+      102 _Mul32f
+
+
+   Segment part sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+      26  ?<Constant "\r\n$ADDR,-XX.XC,V.C,RS...">
+      54  ?<Constant "\r\nN:XXXX T:-XX.XC B:X...">
+       1  ?<Initializer for degCMode>
+       1  ?<Initializer for verboseMode>
+       8  ??Subroutine0_0
+       6  ??Subroutine6_0
+       4  ?Subroutine0
+      12  ?Subroutine1
+      12  ?Subroutine2
+      16  ?Subroutine3
+       8  ?Subroutine4
+       2  ?Subroutine5
+      40  COM_Init
+       1  IE2
+       1  IFG2
+       1  P3SEL
+      26  TXString
+       1  UCA0BR0
+       1  UCA0BR1
+       1  UCA0CTL1
+       1  UCA0MCTL
+       1  UCA0RXBUF
+       1  UCA0TXBUF
+      80  USCI0RX_ISR
+       2  USCI0RX_ISR::??INTVEC 14
+       1  degCMode
+     172  transmitData
+     442  transmitDataString
+       1  verboseMode
+
+ 
+ 828 bytes in segment CODE
+   9 bytes in segment DATA16_AN
+  80 bytes in segment DATA16_C
+   2 bytes in segment DATA16_I
+   2 bytes in segment DATA16_ID
+   2 bytes in segment INTVEC
+ 
+ 828 bytes of CODE  memory
+  82 bytes of CONST memory (+ 2 bytes shared)
+   2 bytes of DATA  memory (+ 9 bytes shared)
+
+Errors: none
+Warnings: none
